@@ -1,0 +1,42 @@
+import numpy as np
+import cv2
+
+img1 = cv2.imread('1_org.jpg')
+img2 = cv2.imread('2_test.jpg')
+
+# Greyscale images
+i1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+i2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+sz = img1.shape
+
+# warp_model = cv2.MOTION_TRANSLATION   # <-- TRANSLATIONS is for 2D translation (ie No Scaling)
+warp_model = cv2.MOTION_HOMOGRAPHY      # <-- HOMOGRAPHY is for 3D translation (takes care of skew)
+
+if warp_model == cv2.MOTION_HOMOGRAPHY :
+  warp_matrix = np.eye(3, 3, dtype=np.float32)    # homography 3x3
+else :
+  warp_matrix = np.eye(2, 3, dtype=np.float32)    # translation 2x3
+
+number_of_iterations = 5000;
+
+termination_eps = 1e-10;
+
+criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, number_of_iterations, termination_eps)
+
+(cc, warp_matrix) = cv2.findTransformECC (i1, i2, warp_matrix, warp_model, criteria)
+
+if warp_model == cv2.MOTION_HOMOGRAPHY :
+  i2_aligned = cv2.warpPerspective(i2, warp_matrix, (sz[1], sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
+else :
+  i2_aligned = cv2.warpAffine(i2, warp_matrix, (sz[1], sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP);
+
+# cv2.imwrite('1_org_greyscaled.png', i1)
+cv2.imwrite('2_test_realigned.png', i2_aligned)
+
+cv2.imshow("Image 1", i1)
+cv2.imshow("Image 2", i2)
+cv2.imshow("Aligned Image 2", i2_aligned)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
