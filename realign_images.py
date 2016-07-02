@@ -1,12 +1,14 @@
 import numpy as np
 import cv2
 
-img1 = cv2.imread('1_org.jpg')
-img2 = cv2.imread('2_test.jpg')
+img1 = cv2.imread('lcntest1.png')
+img2 = cv2.imread('lcntest3.png')
+img3 = cv2.imread('lcntest3.png')
 
 # Greyscale images
 i1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
 i2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+i3 = cv2.cvtColor(img3, cv2.COLOR_BGR2GRAY)
 
 sz = img1.shape
 
@@ -24,15 +26,18 @@ termination_eps = 1e-10;
 
 criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, number_of_iterations, termination_eps)
 
-(cc, warp_matrix) = cv2.findTransformECC (i1, i2, warp_matrix, warp_model, criteria)
+(cc, warp_matrix) = cv2.findTransformECC(i1, i2, warp_matrix, warp_model, criteria)
 
 if warp_model == cv2.MOTION_HOMOGRAPHY :
   i2_aligned = cv2.warpPerspective(i2, warp_matrix, (sz[1], sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
+  i3_aligned = cv2.warpPerspective(i3, warp_matrix, (sz[1], sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
 else :
   i2_aligned = cv2.warpAffine(i2, warp_matrix, (sz[1], sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP);
+  i3_aligned = cv2.warpAffine(i3, warp_matrix, (sz[1], sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP);
 
 # cv2.imwrite('1_org_greyscaled.png', i1)
-cv2.imwrite('2_test_realigned.png', i2_aligned)
+cv2.imwrite('lcns13.png', i2_aligned)
+cv2.imwrite('lcn13.png', i3_aligned)
 
 cv2.imshow("Image 1", i1)
 cv2.imshow("Image 2", i2)
