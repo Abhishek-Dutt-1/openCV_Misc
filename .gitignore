@@ -1,0 +1,4 @@
+*.jpg
+*.png
+
+!all_incl_images/*
