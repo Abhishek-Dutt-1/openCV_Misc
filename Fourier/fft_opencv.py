@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
-img = cv2.imread('lcnstest3.png', 0)
+img = cv2.imread('images/lcnstest2.png', 0)
 #img = cv2.imread('test3.jpg', 0)
 
 dft = cv2.dft(np.float32(img), flags = cv2.DFT_COMPLEX_OUTPUT)
@@ -45,10 +45,10 @@ img_back = cv2.magnitude(img_back[:, :, 0], img_back[:, :, 1])
 img1 = 255 * ( img_back - np.amin(img_back) ) / ( np.amax(img_back) - np.amin(img_back))
 
 cv2.imwrite('test2fft.png', img1 )
-#cv2.imwrite('test2fftdiff.png', np.abs( img1 - img ) )
+cv2.imwrite('test2fftdiff.png', np.abs( img1 - img ) )
 
-#img_diff = cv2.imread('test2fftdiff.png', 0)
-#cv2.imwrite('test2fftdiff_blur.png', np.abs( img1 - img_diff ) )
+img_diff = cv2.imread('test2fftdiff.png', 0)
+cv2.imwrite('test2fftdiff_blur.png', np.abs( img1 - img_diff ) )
 
 
 ## Artistic image
