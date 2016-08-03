@@ -12,6 +12,7 @@ gray = img
 
 
 edges = cv.Canny{ cv.byteify( gray ), 100, 150, apertureSize = 3 }
+image.display(edges)
 -- Detect lines
 minLineLength = 20
 maxLineGap = 1
@@ -48,21 +49,12 @@ end
 
 -- Draw Circles
 for i, p in ipairs(torch.totable(circles)) do
-  print (i, p, p[1], p[2], p[3])
+  -- print (i, p, p[1], p[2], p[3])
   x1, y1, rad = p[1], p[2], p[3]
   print(x1, y1, rad)
   cv.circle{ img, cv.Point( x1, y1 ) , rad, cv.Scalar(0, 255, 0), 20 }
   cv.circle{ edges, cv.Point( x1, y1 ) , rad, cv.Scalar(0, 255, 0), 20 }
 end
 
-
-
-
--- cv2.imwrite('houghlines5.jpg',img)
 image.display(img)
 image.display(edges)
-
---[[
-
-]]--
-
